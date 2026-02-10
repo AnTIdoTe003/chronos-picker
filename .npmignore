@@ -1,0 +1,11 @@
+src
+example
+docs
+node_modules
+.git
+.gitignore
+tsconfig.json
+vite.config.ts
+.eslintrc.json
+*.log
+.DS_Store

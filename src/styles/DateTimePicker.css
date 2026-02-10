@@ -1,0 +1,569 @@
+/* ===== Main Container ===== */
+.chronos-picker {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.chronos-picker[data-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== Input Wrapper ===== */
+.chronos-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.chronos-input {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.chronos-input:hover:not(:disabled) {
+  border-color: #9ca3af;
+}
+
+.chronos-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.chronos-input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.chronos-input::placeholder {
+  color: #9ca3af;
+}
+
+.chronos-calendar-icon {
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.chronos-input:hover:not(:disabled) ~ .chronos-calendar-icon,
+.chronos-input:focus ~ .chronos-calendar-icon {
+  color: #3b82f6;
+}
+
+/* ===== Dropdown Container ===== */
+.chronos-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1000;
+  min-width: 320px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  animation: chronos-dropdown-appear 0.2s ease;
+}
+
+@keyframes chronos-dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Calendar ===== */
+.chronos-calendar {
+  padding: 16px;
+}
+
+.chronos-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.chronos-nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #4b5563;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chronos-nav-button:hover {
+  background: #f3f4f6;
+  color: #1a1a1a;
+}
+
+.chronos-nav-button:active {
+  transform: scale(0.95);
+}
+
+.chronos-month-year-selectors {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.chronos-month-select,
+.chronos-year-select {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.chronos-month-select:hover,
+.chronos-year-select:hover {
+  border-color: #9ca3af;
+}
+
+.chronos-month-select:focus,
+.chronos-year-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ===== Calendar Grid ===== */
+.chronos-calendar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chronos-weekday-row,
+.chronos-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.chronos-weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.chronos-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.chronos-day:hover:not(.disabled) {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+
+.chronos-day.other-month {
+  color: #9ca3af;
+}
+
+.chronos-day.today {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.chronos-day.today::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #3b82f6;
+}
+
+.chronos-day.selected {
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.chronos-day.selected:hover {
+  background: #2563eb;
+}
+
+.chronos-day.disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.chronos-day.disabled:hover {
+  background: transparent;
+  transform: none;
+}
+
+.chronos-day:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ===== Time Picker ===== */
+.chronos-time-picker {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.chronos-time-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.chronos-clock-icon {
+  width: 18px;
+  height: 18px;
+  color: #6b7280;
+}
+
+.chronos-time-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chronos-time-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chronos-time-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chronos-time-select {
+  width: 70px;
+  padding: 8px 10px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+  text-align: center;
+}
+
+.chronos-time-select:hover {
+  border-color: #9ca3af;
+}
+
+.chronos-time-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.chronos-time-separator {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.chronos-period-toggle {
+  padding: 8px 16px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.chronos-period-toggle:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.chronos-period-toggle:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.chronos-period-toggle:active {
+  transform: scale(0.95);
+}
+
+/* ===== Timezone Selector ===== */
+.chronos-timezone-selector {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.chronos-timezone-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.chronos-globe-icon {
+  width: 18px;
+  height: 18px;
+  color: #6b7280;
+}
+
+.chronos-timezone-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.chronos-timezone-button:hover {
+  border-color: #9ca3af;
+}
+
+.chronos-timezone-button:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.chronos-timezone-label {
+  font-weight: 500;
+  color: #1a1a1a;
+  flex: 1;
+  text-align: left;
+}
+
+.chronos-timezone-offset {
+  font-size: 12px;
+  color: #6b7280;
+  margin-right: 8px;
+}
+
+.chronos-chevron {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.chronos-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.chronos-timezone-list {
+  margin-top: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  animation: chronos-timezone-list-appear 0.2s ease;
+}
+
+@keyframes chronos-timezone-list-appear {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 240px;
+  }
+}
+
+.chronos-timezone-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  outline: none;
+}
+
+.chronos-timezone-option:last-child {
+  border-bottom: none;
+}
+
+.chronos-timezone-option:hover {
+  background: #f9fafb;
+}
+
+.chronos-timezone-option.selected {
+  background: #eff6ff;
+}
+
+.chronos-timezone-option:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+.chronos-timezone-option-label {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.chronos-timezone-option.selected .chronos-timezone-option-label {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.chronos-timezone-option-offset {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 480px) {
+  .chronos-dropdown {
+    min-width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+  }
+  
+  .chronos-picker {
+    max-width: 100%;
+  }
+}
+
+/* ===== Custom Scrollbar ===== */
+.chronos-timezone-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chronos-timezone-list::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.chronos-timezone-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.chronos-timezone-list::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===== Dark Mode Support (Optional) ===== */
+@media (prefers-color-scheme: dark) {
+  .chronos-picker {
+    color: #f3f4f6;
+  }
+  
+  .chronos-input {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+  }
+  
+  .chronos-input:hover:not(:disabled) {
+    border-color: #4b5563;
+  }
+  
+  .chronos-input:disabled {
+    background-color: #111827;
+  }
+  
+  .chronos-dropdown {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .chronos-day,
+  .chronos-time-select,
+  .chronos-timezone-button {
+    color: #f3f4f6;
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+  
+  .chronos-day:hover:not(.disabled) {
+    background: #374151;
+  }
+  
+  .chronos-day.selected {
+    background: #3b82f6;
+    color: #ffffff;
+  }
+}
