@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+/* Ensure Chronos Picker dropdown appears above nav and cards */
+.chronos-dropdown {
+  z-index: 9999;
+}
+
 :root {
   --color-primary: #3b82f6;
   --color-primary-dark: #2563eb;

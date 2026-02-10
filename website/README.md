@@ -172,7 +172,7 @@ npm run build
 
 - [Main Package Documentation](../README.md)
 - [GitHub Repository](https://github.com/yourusername/chronos-picker)
-- [npm Package](https://www.npmjs.com/package/@chronos/picker)
+- [npm Package](https://www.npmjs.com/package/@theengineerguy/chronos-picker)
 
 ## 📄 License
 

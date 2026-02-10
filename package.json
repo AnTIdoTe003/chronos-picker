@@ -1,10 +1,11 @@
 {
-  "name": "theengineerguy/chronos-picker",
-  "version": "1.0.0",
+  "name": "@theengineerguy/chronos-picker",
+  "version": "1.0.1",
   "description": "A modern, accessible date & time picker with comprehensive timezone support",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "publish" :"npm publish --access public",
   "files": [
     "dist"
   ],
@@ -27,9 +28,9 @@
   ],
   "author": "Debmalya Biswas <viperbale.db.@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/yourusername/chronos-picker#readme",
+  "homepage": "https://github.com/AnTIdoTe003/chronos-picker#readme",
   "bugs": {
-    "url": "https://github.com/yourusername/chronos-picker/issues"
+    "url": "https://github.com/AnTIdoTe003/chronos-picker/issues"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -54,6 +55,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/chronos-picker"
+    "url": "https://github.com/AnTIdoTe003/chronos-picker"
   }
 }

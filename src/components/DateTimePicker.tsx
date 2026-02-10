@@ -22,6 +22,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   className = '',
   ariaLabel = 'Date and time picker',
   showTimezoneSelector = false,
+  theme = 'light',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<DateTime | null>(() => {
@@ -166,6 +167,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       ref={containerRef}
       className={`chronos-picker ${className}`}
       data-disabled={disabled}
+      data-theme={theme}
     >
       <div 
         className="chronos-input-wrapper"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { DateTimePicker } from '@chronos/picker';
-import type { DateTimeValue } from '@chronos/picker';
+import { DateTimePicker } from '@theengineerguy/chronos-picker';
+import type { DateTimeValue } from '@theengineerguy/chronos-picker';
 import { DateTime } from 'luxon';
 import CodeBlock from '../components/CodeBlock';
 import './Examples.css';
@@ -299,7 +299,7 @@ const maxDate = DateTime.now().plus({ days: 90 }).toJSDate();
           <CodeBlock 
             language="tsx"
             code={`import { useForm, Controller } from 'react-hook-form';
-import { DateTimePicker } from '@chronos/picker';
+import { DateTimePicker } from '@theengineerguy/chronos-picker';
 
 function BookingForm() {
   const { control, handleSubmit } = useForm();

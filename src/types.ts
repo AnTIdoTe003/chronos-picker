@@ -53,6 +53,9 @@ export interface DateTimePickerProps {
   
   /** Show timezone selector */
   showTimezoneSelector?: boolean;
+
+  /** Theme: 'light' (default) or 'dark' */
+  theme?: 'light' | 'dark';
 }
 
 export interface CalendarDate {

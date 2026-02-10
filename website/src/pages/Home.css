@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   padding-top: 70px;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .hero-background {
@@ -113,7 +113,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: var(--shadow-2xl);
 }
 

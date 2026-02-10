@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DateTimePicker } from '@chronos/picker';
-import type { DateTimeValue } from '@chronos/picker';
+import { DateTimePicker } from '@theengineerguy/chronos-picker';
+import type { DateTimeValue } from '@theengineerguy/chronos-picker';
 import CodeBlock from '../components/CodeBlock';
 import './Home.css';
 
@@ -205,7 +205,7 @@ const Home: React.FC = () => {
               <div className="step-number">1</div>
               <div className="step-content">
                 <h3>Install the package</h3>
-                <CodeBlock language="bash" code="npm install @chronos/picker luxon" />
+                <CodeBlock language="bash" code="npm install @theengineerguy/chronos-picker luxon" />
               </div>
             </div>
             
@@ -213,9 +213,9 @@ const Home: React.FC = () => {
               <div className="step-number">2</div>
               <div className="step-content">
                 <h3>Import and use</h3>
-                <CodeBlock 
-                  language="tsx" 
-                  code={`import { DateTimePicker } from '@chronos/picker';
+            <CodeBlock 
+              language="tsx" 
+              code={`import { DateTimePicker } from '@theengineerguy/chronos-picker';
 
 function App() {
   return (

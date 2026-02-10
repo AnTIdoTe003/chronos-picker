@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { DateTimePicker } from '@chronos/picker';
-import type { DateTimeValue } from '@chronos/picker';
+import { DateTimePicker } from '@theengineerguy/chronos-picker';
+import type { DateTimeValue } from '@theengineerguy/chronos-picker';
 import { DateTime } from 'luxon';
 import './Playground.css';
 
