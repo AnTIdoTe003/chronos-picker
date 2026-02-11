@@ -6,7 +6,8 @@ import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const localLibPath = path.resolve(__dirname, '../src');
-const useLocalLib = fs.existsSync(localLibPath);
+const isCI = process.env.CI || process.env.VERCEL;
+const useLocalLib = !isCI && fs.existsSync(localLibPath);
 
 export default defineConfig({
   plugins: [react()],
