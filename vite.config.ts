@@ -18,7 +18,7 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'esm.js' : 'js'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'luxon'],
+      external: ['react', 'react-dom', 'luxon', 'react/jsx-runtime'],
       output: {
         globals: {
           react: 'React',
