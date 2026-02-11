@@ -1,0 +1,17 @@
+# Robots.txt for Chronos Picker
+User-agent: *
+Allow: /
+Disallow: /private/
+
+# Specific rules for search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://chronos-picker.com/sitemap.xml

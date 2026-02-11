@@ -36,14 +36,14 @@ import { DateTimePicker, DateTimeValue } from '@chronos/picker';
 
 function App() {
   const [value, setValue] = useState<DateTimeValue | null>(null);
-  
+
   const handleChange = (newValue: DateTimeValue) => {
     setValue(newValue);
     console.log('ISO:', newValue.iso);
     console.log('Formatted:', newValue.formatted);
     console.log('Timestamp:', newValue.timestamp);
   };
-  
+
   return (
     <DateTimePicker
       value={value?.dateTime}
@@ -163,18 +163,18 @@ function BasicExample() {
 ```tsx
 function ControlledExample() {
   const [selectedDate, setSelectedDate] = useState<DateTime | null>(null);
-  
+
   return (
     <div>
       <DateTimePicker
         value={selectedDate}
         onChange={(value) => setSelectedDate(value.dateTime)}
       />
-      
+
       <button onClick={() => setSelectedDate(DateTime.now())}>
         Set to Now
       </button>
-      
+
       <button onClick={() => setSelectedDate(null)}>
         Clear
       </button>
@@ -201,7 +201,7 @@ function ControlledExample() {
 function MultiTimezoneExample() {
   const [indiaTime, setIndiaTime] = useState<DateTimeValue | null>(null);
   const [nyTime, setNYTime] = useState<DateTimeValue | null>(null);
-  
+
   const handleIndiaChange = (value: DateTimeValue) => {
     setIndiaTime(value);
     // Convert to New York time
@@ -213,7 +213,7 @@ function MultiTimezoneExample() {
       iso: converted.toISO() || '',
     });
   };
-  
+
   return (
     <div>
       <div>
@@ -224,7 +224,7 @@ function MultiTimezoneExample() {
           onChange={handleIndiaChange}
         />
       </div>
-      
+
       <div>
         <label>New York Time (EST/EDT)</label>
         <DateTimePicker
@@ -309,22 +309,22 @@ import { DateTime } from 'luxon';
 function AdvancedExample() {
   const handleChange = (value: DateTimeValue) => {
     const dt = value.dateTime;
-    
+
     // Access Luxon DateTime methods
     console.log('Day of week:', dt.weekdayLong);
     console.log('Week number:', dt.weekNumber);
     console.log('Is DST:', dt.isInDST);
-    
+
     // Format in different ways
     console.log('ISO:', dt.toISO());
     console.log('SQL:', dt.toSQL());
     console.log('Relative:', dt.toRelative());
-    
+
     // Convert to other timezones
     const tokyo = dt.setZone('Asia/Tokyo');
     console.log('Tokyo time:', tokyo.toFormat('HH:mm'));
   };
-  
+
   return <DateTimePicker onChange={handleChange} />;
 }
 ```
@@ -383,4 +383,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-Made with ❤️ by developers, for developers
+Made with ❤️ by Debmalya, for developers

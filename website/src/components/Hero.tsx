@@ -16,12 +16,11 @@ export default function Hero() {
         <div className={styles.content}>
           <div className={styles.badge}>v1.0.2 Now Available</div>
           <h1 className={styles.title}>
-            Timezone-Aware <br />
-            <span className={styles.gradientText}>Date & Time Picker</span>
+            Modern Timezone-Aware <br />
+            <span className={styles.gradientText}>Date & Time Picker for React</span>
           </h1>
           <p className={styles.description}>
-            A modern, accessible, and highly customizable React component for
-            handling dates and times across different timezones with ease.
+            Chronos Picker is a fully-featured, accessible, and highly customizable React date time picker component for handling dates and times across different timezones with ease. Built with TypeScript, WCAG 2.1 compliance, and dark mode support.
           </p>
 
           <div className={styles.actions}>
@@ -36,12 +35,18 @@ export default function Hero() {
               className={styles.secondaryButton}
             >
               <Github size={18} />
-              GitHub
+              View on GitHub
             </a>
           </div>
 
           <div className={styles.installCommand}>
             <code>npm install @theengineerguy/chronos-picker luxon</code>
+          </div>
+
+          <div style={{ marginTop: '2rem', fontSize: '0.875rem', color: '#666' }}>
+            <p>✓ Full timezone support with IANA database</p>
+            <p>✓ Accessible (WCAG 2.1 AA compliant)</p>
+            <p>✓ Dark mode & responsive design</p>
           </div>
         </div>
 
@@ -62,6 +67,7 @@ export default function Hero() {
                   onChange={(val) => setDate(val)}
                   value={date?.dateTime}
                   timezone="Asia/Kolkata"
+                  aria-label="Date and time picker demo"
                 />
               </div>
 
