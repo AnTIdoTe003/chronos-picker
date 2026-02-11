@@ -14,6 +14,7 @@ const Playground: React.FC = () => {
   const [showTimezoneSelector, setShowTimezoneSelector] = useState(false);
   const [dateFormat, setDateFormat] = useState('DD');
   const [timeFormat, setTimeFormat] = useState('HH:mm');
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [minDateEnabled, setMinDateEnabled] = useState(false);
   const [maxDateEnabled, setMaxDateEnabled] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -51,6 +52,10 @@ const Playground: React.FC = () => {
     
     if (timeFormat !== 'HH:mm') {
       props.push(`timeFormat="${timeFormat}"`);
+    }
+    
+    if (orientation !== 'portrait') {
+      props.push(`orientation="${orientation}"`);
     }
     
     if (minDateEnabled) {
@@ -128,6 +133,16 @@ const Playground: React.FC = () => {
                     <option value="HH:mm:ss">HH:MM:SS (24-hour)</option>
                     <option value="hh:mm a">hh:mm AM/PM</option>
                     <option value="h:mm a">h:mm AM/PM</option>
+                  </select>
+                </label>
+              </div>
+              
+              <div className="config-group">
+                <label>
+                  Orientation
+                  <select value={orientation} onChange={(e) => setOrientation(e.target.value as 'portrait' | 'landscape')}>
+                    <option value="portrait">Portrait (Stacked)</option>
+                    <option value="landscape">Landscape (Side-by-side)</option>
                   </select>
                 </label>
               </div>
@@ -213,6 +228,7 @@ const Playground: React.FC = () => {
                   setShowTimezoneSelector(false);
                   setDateFormat('DD');
                   setTimeFormat('HH:mm');
+                  setOrientation('portrait');
                   setMinDateEnabled(false);
                   setMaxDateEnabled(false);
                   setDisabled(false);
@@ -238,6 +254,7 @@ const Playground: React.FC = () => {
                 showTimezoneSelector={showTimezoneSelector}
                 dateFormat={dateFormat}
                 timeFormat={timeFormat}
+                orientation={orientation}
                 minDate={minDateEnabled ? today : undefined}
                 maxDate={maxDateEnabled ? futureDate : undefined}
                 disabled={disabled}

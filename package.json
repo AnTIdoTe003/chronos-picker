@@ -1,6 +1,6 @@
 {
   "name": "@theengineerguy/chronos-picker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A modern, accessible date & time picker with comprehensive timezone support",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

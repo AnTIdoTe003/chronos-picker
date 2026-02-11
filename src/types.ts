@@ -56,6 +56,9 @@ export interface DateTimePickerProps {
 
   /** Theme: 'light' (default) or 'dark' */
   theme?: 'light' | 'dark';
+
+  /** Orientation: 'portrait' (stacked, default) or 'landscape' (side-by-side) */
+  orientation?: 'portrait' | 'landscape';
 }
 
 export interface CalendarDate {

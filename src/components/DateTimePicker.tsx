@@ -23,6 +23,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   ariaLabel = 'Date and time picker',
   showTimezoneSelector = false,
   theme = 'light',
+  orientation = 'portrait',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<DateTime | null>(() => {
@@ -205,34 +206,41 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       {isOpen && (
         <div 
           className="chronos-dropdown"
+          data-orientation={orientation}
           role="dialog"
           aria-label="Date and time picker dialog"
         >
-          <Calendar
-            viewDate={viewDate}
-            selectedDate={selectedDateTime}
-            onDateSelect={handleDateSelect}
-            onViewDateChange={setViewDate}
-            timezone={currentTimezone}
-            minDate={minDateTime}
-            maxDate={maxDateTime}
-          />
-          
-          {showTime && (
-            <TimePicker
-              value={selectedDateTime}
-              onChange={handleTimeChange}
-              use24Hour={use24Hour}
+          <div className="chronos-dropdown-content">
+            <Calendar
+              viewDate={viewDate}
+              selectedDate={selectedDateTime}
+              onDateSelect={handleDateSelect}
+              onViewDateChange={setViewDate}
               timezone={currentTimezone}
+              minDate={minDateTime}
+              maxDate={maxDateTime}
             />
-          )}
-          
-          {showTimezoneSelector && (
-            <TimezoneSelector
-              value={currentTimezone}
-              onChange={handleTimezoneChange}
-            />
-          )}
+            
+            {(showTime || showTimezoneSelector) && (
+              <div className="chronos-sidebar">
+                {showTime && (
+                  <TimePicker
+                    value={selectedDateTime}
+                    onChange={handleTimeChange}
+                    use24Hour={use24Hour}
+                    timezone={currentTimezone}
+                  />
+                )}
+                
+                {showTimezoneSelector && (
+                  <TimezoneSelector
+                    value={currentTimezone}
+                    onChange={handleTimezoneChange}
+                  />
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

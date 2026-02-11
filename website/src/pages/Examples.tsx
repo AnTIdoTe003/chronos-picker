@@ -12,6 +12,8 @@ const Examples: React.FC = () => {
   const [restrictedValue, setRestrictedValue] = useState<DateTimeValue | null>(null);
   const [formatValue, setFormatValue] = useState<DateTimeValue | null>(null);
   const [meetingValue, setMeetingValue] = useState<DateTimeValue | null>(null);
+  const [landscapeValue, setLandscapeValue] = useState<DateTimeValue | null>(null);
+  const [portraitValue, setPortraitValue] = useState<DateTimeValue | null>(null);
 
   const today = DateTime.now().toJSDate();
   const maxDate = DateTime.now().plus({ days: 90 }).toJSDate();
@@ -148,6 +150,94 @@ const Examples: React.FC = () => {
               code={`<DateTimePicker
   showTimezoneSelector
   timezone="UTC"
+  onChange={(value) => console.log(value)}
+/>`}
+            />
+          </div>
+        </div>
+
+        {/* Landscape Orientation */}
+        <div className="example">
+          <div className="example-content">
+            <h2>Landscape Orientation</h2>
+            <p>Display calendar, time, and timezone selector side-by-side for a more compact layout.</p>
+            
+            <div className="example-demo">
+              <DateTimePicker
+                value={landscapeValue?.dateTime}
+                onChange={setLandscapeValue}
+                orientation="landscape"
+                showTimezoneSelector
+                timezone="UTC"
+                placeholder="Landscape layout"
+              />
+              
+              {landscapeValue && (
+                <div className="example-output">
+                  <div className="output-item">
+                    <span>Selected:</span>
+                    <code>{landscapeValue.formatted}</code>
+                  </div>
+                  <div className="output-item">
+                    <span>Timezone:</span>
+                    <code>{landscapeValue.dateTime.zoneName}</code>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="example-code">
+            <CodeBlock 
+              language="tsx"
+              code={`<DateTimePicker
+  orientation="landscape"
+  showTimezoneSelector
+  timezone="UTC"
+  onChange={(value) => console.log(value)}
+/>`}
+            />
+          </div>
+        </div>
+
+        {/* Portrait Orientation */}
+        <div className="example">
+          <div className="example-content">
+            <h2>Portrait Orientation (Default)</h2>
+            <p>Display calendar, time, and timezone selector in a stacked layout for better mobile experience.</p>
+            
+            <div className="example-demo">
+              <DateTimePicker
+                value={portraitValue?.dateTime}
+                onChange={setPortraitValue}
+                orientation="portrait"
+                showTimezoneSelector
+                timezone="Asia/Kolkata"
+                placeholder="Portrait layout"
+              />
+              
+              {portraitValue && (
+                <div className="example-output">
+                  <div className="output-item">
+                    <span>Selected:</span>
+                    <code>{portraitValue.formatted}</code>
+                  </div>
+                  <div className="output-item">
+                    <span>Timezone:</span>
+                    <code>{portraitValue.dateTime.zoneName}</code>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="example-code">
+            <CodeBlock 
+              language="tsx"
+              code={`<DateTimePicker
+  orientation="portrait"
+  showTimezoneSelector
+  timezone="Asia/Kolkata"
   onChange={(value) => console.log(value)}
 />`}
             />

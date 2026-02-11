@@ -292,6 +292,30 @@ function App() {
                     </td>
                     <td>Show timezone selector</td>
                   </tr>
+                  <tr>
+                    <td>
+                      <code>theme</code>
+                    </td>
+                    <td>
+                      <code>"light" | "dark"</code>
+                    </td>
+                    <td>
+                      <code>"light"</code>
+                    </td>
+                    <td>Visual theme</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code>orientation</code>
+                    </td>
+                    <td>
+                      <code>"portrait" | "landscape"</code>
+                    </td>
+                    <td>
+                      <code>"portrait"</code>
+                    </td>
+                    <td>Layout orientation (stacked or side-by-side)</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -335,6 +359,8 @@ function App() {
   className?: string;
   ariaLabel?: string;
   showTimezoneSelector?: boolean;
+  theme?: 'light' | 'dark';
+  orientation?: 'portrait' | 'landscape';
 }`}
             />
           </section>
@@ -518,6 +544,16 @@ const nowInNY = nowInTimezone('America/New_York');`}
               code={`<DateTimePicker
   use24Hour={false}
   timeFormat="hh:mm a"
+  onChange={(value) => console.log(value)}
+/>`}
+            />
+
+            <h3>Landscape Orientation</h3>
+            <CodeBlock
+              language="tsx"
+              code={`<DateTimePicker
+  orientation="landscape"
+  showTimezoneSelector
   onChange={(value) => console.log(value)}
 />`}
             />

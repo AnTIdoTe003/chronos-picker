@@ -83,6 +83,49 @@
   animation: chronos-dropdown-appear 0.2s ease;
 }
 
+.chronos-dropdown-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Portrait orientation (default) - stacked layout */
+.chronos-dropdown[data-orientation="portrait"] .chronos-dropdown-content {
+  flex-direction: column;
+}
+
+/* Landscape orientation - side-by-side layout */
+.chronos-dropdown[data-orientation="landscape"] {
+  min-width: auto;
+}
+
+.chronos-dropdown[data-orientation="landscape"] .chronos-dropdown-content {
+  flex-direction: row;
+}
+
+.chronos-dropdown[data-orientation="landscape"] .chronos-calendar {
+  border-right: 1px solid #e5e7eb;
+  border-bottom: none;
+}
+
+.chronos-dropdown[data-orientation="landscape"] .chronos-sidebar {
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+}
+
+.chronos-dropdown[data-orientation="landscape"] .chronos-time-picker {
+  border-top: none;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.chronos-dropdown[data-orientation="landscape"] .chronos-time-picker:last-child {
+  border-bottom: none;
+}
+
+.chronos-dropdown[data-orientation="landscape"] .chronos-timezone-selector {
+  border-top: none;
+}
+
 @keyframes chronos-dropdown-appear {
   from {
     opacity: 0;
@@ -265,6 +308,9 @@
 /* ===== Time Picker ===== */
 .chronos-time-picker {
   padding: 16px;
+}
+
+.chronos-dropdown[data-orientation="portrait"] .chronos-time-picker {
   border-top: 1px solid #e5e7eb;
 }
 
@@ -367,6 +413,9 @@
 /* ===== Timezone Selector ===== */
 .chronos-timezone-selector {
   padding: 16px;
+}
+
+.chronos-dropdown[data-orientation="portrait"] .chronos-timezone-selector {
   border-top: 1px solid #e5e7eb;
 }
 
@@ -535,6 +584,19 @@
   color: #f3f4f6;
 }
 
+.chronos-picker[data-theme="dark"] .chronos-dropdown[data-orientation="landscape"] .chronos-calendar {
+  border-right-color: #374151;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-dropdown[data-orientation="landscape"] .chronos-time-picker {
+  border-bottom-color: #374151;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-dropdown[data-orientation="portrait"] .chronos-time-picker,
+.chronos-picker[data-theme="dark"] .chronos-dropdown[data-orientation="portrait"] .chronos-timezone-selector {
+  border-top-color: #374151;
+}
+
 .chronos-picker[data-theme="dark"] .chronos-input {
   background-color: #1f2937;
   border-color: #374151;
@@ -606,11 +668,6 @@
 .chronos-picker[data-theme="dark"] .chronos-day.selected {
   background: #3b82f6;
   color: #ffffff;
-}
-
-.chronos-picker[data-theme="dark"] .chronos-time-picker,
-.chronos-picker[data-theme="dark"] .chronos-timezone-selector {
-  border-top-color: #374151;
 }
 
 .chronos-picker[data-theme="dark"] .chronos-time-header,
