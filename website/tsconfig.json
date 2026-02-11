@@ -14,11 +14,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@theengineerguy/chronos-picker": ["../src"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
 }
