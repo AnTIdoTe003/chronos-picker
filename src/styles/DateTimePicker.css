@@ -73,7 +73,7 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 9999;
+  z-index: 99999;
   min-width: 320px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -135,6 +135,26 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ===== Range summary header ===== */
+.chronos-range-summary {
+  padding: 16px 16px 0;
+  margin-bottom: 8px;
+}
+
+.chronos-range-nights {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.chronos-range-dates {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 4px;
 }
 
 /* ===== Calendar ===== */
@@ -298,6 +318,51 @@
 .chronos-day.disabled:hover {
   background: transparent;
   transform: none;
+}
+
+/* Range selection: bar between start and end */
+.chronos-day.in-range {
+  background: #e5e7eb;
+  border-radius: 0;
+}
+
+.chronos-day.in-range:hover {
+  background: #d1d5db;
+}
+
+.chronos-day.range-start {
+  border-radius: 50% 0 0 50%;
+}
+
+.chronos-day.range-start.in-range {
+  background: #e5e7eb;
+}
+
+.chronos-day.range-end {
+  border-radius: 0 50% 50% 0;
+}
+
+.chronos-day.range-end.in-range {
+  background: #e5e7eb;
+}
+
+/* Start/end dates: circle on top of bar */
+.chronos-day.range-start.selected,
+.chronos-day.range-end.selected {
+  background: #1a1a1a;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+.chronos-day.range-start.selected:hover,
+.chronos-day.range-end.selected:hover {
+  background: #374151;
+}
+
+/* Same-day range: single circle */
+.chronos-day.range-start.range-end {
+  border-radius: 50%;
 }
 
 .chronos-day:focus-visible {
@@ -668,6 +733,29 @@
 .chronos-picker[data-theme="dark"] .chronos-day.selected {
   background: #3b82f6;
   color: #ffffff;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-range-nights {
+  color: #f3f4f6;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-range-dates {
+  color: #9ca3af;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-day.in-range {
+  background: #374151;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-day.in-range:hover {
+  background: #4b5563;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-day.range-start.selected,
+.chronos-picker[data-theme="dark"] .chronos-day.range-end.selected {
+  background: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 0 0 2px #1f2937;
 }
 
 .chronos-picker[data-theme="dark"] .chronos-time-header,

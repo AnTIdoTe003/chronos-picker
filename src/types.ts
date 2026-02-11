@@ -11,6 +11,15 @@ export interface DateTimeValue {
   dateTime: DateTime;
 }
 
+export interface DateTimeRangeValue {
+  /** Start of range */
+  start: DateTimeValue;
+  /** End of range */
+  end: DateTimeValue;
+  /** Number of nights/days in range (end - start in days) */
+  nights: number;
+}
+
 export interface DateTimePickerProps {
   /** Selected date and time value */
   value?: Date | string | DateTime;
@@ -59,6 +68,15 @@ export interface DateTimePickerProps {
 
   /** Orientation: 'portrait' (stacked, default) or 'landscape' (side-by-side) */
   orientation?: 'portrait' | 'landscape';
+
+  /** Selection mode: 'single' (default) or 'range' for start/end date range */
+  selectionMode?: 'single' | 'range';
+
+  /** Range value when selectionMode is 'range' */
+  rangeValue?: { start: Date | string | DateTime; end: Date | string | DateTime } | null;
+
+  /** Callback when range changes (selectionMode is 'range') */
+  onRangeChange?: (value: DateTimeRangeValue) => void;
 }
 
 export interface CalendarDate {
@@ -67,4 +85,10 @@ export interface CalendarDate {
   isToday: boolean;
   isSelected: boolean;
   isDisabled: boolean;
+  /** In range (between start and end, or start/end day) */
+  isInRange?: boolean;
+  /** Is the range start date */
+  isRangeStart?: boolean;
+  /** Is the range end date */
+  isRangeEnd?: boolean;
 }

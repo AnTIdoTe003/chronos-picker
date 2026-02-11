@@ -7,6 +7,15 @@ import { TimePicker } from './TimePicker';
 import { TimezoneSelector } from './TimezoneSelector';
 import '../styles/DateTimePicker.css';
 
+function toDateTimeValue(dt: DateTime, dateFormat: string, timeFormat: string): DateTimeValue {
+  return {
+    iso: dt.toISO() || '',
+    formatted: dt.toFormat(`${dateFormat} ${timeFormat}`),
+    timestamp: dt.toMillis(),
+    dateTime: dt,
+  };
+}
+
 export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   value,
   onChange,
@@ -24,17 +33,33 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   showTimezoneSelector = false,
   theme = 'light',
   orientation = 'portrait',
+  selectionMode = 'single',
+  rangeValue,
+  onRangeChange,
 }) => {
+  const isRangeMode = selectionMode === 'range';
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<DateTime | null>(() => {
-    if (value) {
+    if (!isRangeMode && value) {
       return convertToTimezone(value, timezone);
+    }
+    return null;
+  });
+  const [rangeStart, setRangeStart] = useState<DateTime | null>(() => {
+    if (isRangeMode && rangeValue?.start) {
+      return convertToTimezone(rangeValue.start, timezone);
+    }
+    return null;
+  });
+  const [rangeEnd, setRangeEnd] = useState<DateTime | null>(() => {
+    if (isRangeMode && rangeValue?.end) {
+      return convertToTimezone(rangeValue.end, timezone);
     }
     return null;
   });
   const [currentTimezone, setCurrentTimezone] = useState(timezone);
   const [viewDate, setViewDate] = useState<DateTime>(() => {
-    return selectedDateTime || nowInTimezone(timezone);
+    return selectedDateTime || rangeStart || rangeEnd || nowInTimezone(timezone);
   });
   
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,10 +67,18 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   
   // Update selected date when value prop changes
   useEffect(() => {
-    if (value) {
+    if (!isRangeMode && value) {
       setSelectedDateTime(convertToTimezone(value, currentTimezone));
     }
-  }, [value, currentTimezone]);
+  }, [value, currentTimezone, isRangeMode]);
+
+  // Sync range from prop when in range mode
+  useEffect(() => {
+    if (isRangeMode && rangeValue?.start != null && rangeValue?.end != null) {
+      setRangeStart(convertToTimezone(rangeValue.start, currentTimezone));
+      setRangeEnd(convertToTimezone(rangeValue.end, currentTimezone));
+    }
+  }, [isRangeMode, rangeValue, currentTimezone]);
   
   // Handle click outside to close
   useEffect(() => {
@@ -121,6 +154,21 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     }
   }, [selectedDateTime, currentTimezone, onChange, dateFormat, timeFormat]);
   
+  const handleRangeSelect = useCallback((start: DateTime, end: DateTime) => {
+    const s = start.startOf('day');
+    const e = end.startOf('day');
+    const [actualStart, actualEnd] = s <= e ? [s, e] : [e, s];
+    setRangeStart(actualStart);
+    setRangeEnd(actualEnd);
+    setViewDate(actualStart);
+    if (onRangeChange) {
+      const startVal = toDateTimeValue(actualStart, dateFormat, timeFormat);
+      const endVal = toDateTimeValue(actualEnd, dateFormat, timeFormat);
+      const nights = Math.max(0, Math.ceil(actualEnd.diff(actualStart, 'days').days));
+      onRangeChange({ start: startVal, end: endVal, nights });
+    }
+  }, [onRangeChange, dateFormat, timeFormat]);
+
   const handleTimezoneChange = useCallback((newTimezone: string) => {
     setCurrentTimezone(newTimezone);
     
@@ -156,9 +204,13 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     }
   };
   
-  const displayValue = selectedDateTime
-    ? selectedDateTime.toFormat(`${dateFormat} ${showTime ? timeFormat : ''}`)
-    : '';
+  const displayValue = isRangeMode
+    ? (rangeStart && rangeEnd
+        ? `${rangeStart.toFormat('d MMM yyyy')} – ${rangeEnd.toFormat('d MMM yyyy')}`
+        : '')
+    : (selectedDateTime
+        ? selectedDateTime.toFormat(`${dateFormat} ${showTime ? timeFormat : ''}`)
+        : '');
   
   const minDateTime = minDate ? convertToTimezone(minDate, currentTimezone) : undefined;
   const maxDateTime = maxDate ? convertToTimezone(maxDate, currentTimezone) : undefined;
@@ -207,21 +259,35 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
         <div 
           className="chronos-dropdown"
           data-orientation={orientation}
+          data-range-mode={isRangeMode}
           role="dialog"
           aria-label="Date and time picker dialog"
         >
           <div className="chronos-dropdown-content">
+            {isRangeMode && rangeStart && rangeEnd && (
+              <div className="chronos-range-summary">
+                <div className="chronos-range-nights">
+                  {Math.max(0, Math.ceil(rangeEnd.diff(rangeStart, 'days').days))} nights
+                </div>
+                <div className="chronos-range-dates">
+                  {rangeStart.toFormat('d MMM yyyy')} – {rangeEnd.toFormat('d MMM yyyy')}
+                </div>
+              </div>
+            )}
             <Calendar
               viewDate={viewDate}
-              selectedDate={selectedDateTime}
+              selectedDate={isRangeMode ? null : selectedDateTime}
               onDateSelect={handleDateSelect}
               onViewDateChange={setViewDate}
               timezone={currentTimezone}
               minDate={minDateTime}
               maxDate={maxDateTime}
+              selectedStart={isRangeMode ? rangeStart : undefined}
+              selectedEnd={isRangeMode ? rangeEnd : undefined}
+              onRangeSelect={isRangeMode ? handleRangeSelect : undefined}
             />
             
-            {(showTime || showTimezoneSelector) && (
+            {!isRangeMode && (showTime || showTimezoneSelector) && (
               <div className="chronos-sidebar">
                 {showTime && (
                   <TimePicker

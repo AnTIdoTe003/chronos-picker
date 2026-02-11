@@ -10,7 +10,9 @@ export function generateCalendarMonth(
   timezone: string,
   selectedDate?: DateTime,
   minDate?: DateTime,
-  maxDate?: DateTime
+  maxDate?: DateTime,
+  selectedStart?: DateTime,
+  selectedEnd?: DateTime
 ): CalendarDate[][] {
   const firstDayOfMonth = DateTime.fromObject(
     { year, month, day: 1 },
@@ -22,6 +24,10 @@ export function generateCalendarMonth(
   const endOfWeek = endOfMonth.endOf('week');
   
   const today = DateTime.now().setZone(timezone).startOf('day');
+  const isRangeMode = selectedStart != null && selectedEnd != null;
+
+  const startDay = selectedStart?.startOf('day');
+  const endDay = selectedEnd?.endOf('day');
   
   const weeks: CalendarDate[][] = [];
   let currentWeek: CalendarDate[] = [];
@@ -30,9 +36,21 @@ export function generateCalendarMonth(
   while (currentDate <= endOfWeek) {
     const isCurrentMonth = currentDate.month === month;
     const isToday = currentDate.hasSame(today, 'day');
-    const isSelected = selectedDate
-      ? currentDate.hasSame(selectedDate, 'day')
-      : false;
+    const dayStart = currentDate.startOf('day');
+    
+    let isSelected = false;
+    let isInRange = false;
+    let isRangeStart = false;
+    let isRangeEnd = false;
+
+    if (isRangeMode && startDay && endDay) {
+      isRangeStart = dayStart.hasSame(startDay, 'day');
+      isRangeEnd = dayStart.hasSame(endDay, 'day');
+      isInRange = (dayStart >= startDay && dayStart <= endDay) || isRangeStart || isRangeEnd;
+      isSelected = isRangeStart || isRangeEnd;
+    } else if (selectedDate) {
+      isSelected = currentDate.hasSame(selectedDate, 'day');
+    }
     
     let isDisabled = false;
     if (minDate && currentDate < minDate.startOf('day')) {
@@ -48,6 +66,9 @@ export function generateCalendarMonth(
       isToday,
       isSelected,
       isDisabled,
+      isInRange,
+      isRangeStart,
+      isRangeEnd,
     });
     
     if (currentWeek.length === 7) {

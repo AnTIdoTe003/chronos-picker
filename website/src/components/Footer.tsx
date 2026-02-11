@@ -1,86 +1,35 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Footer.css';
+"use client";
 
-const Footer: React.FC = () => {
+import styles from "./Footer.module.css";
+import { Twitter, Github, Heart } from "lucide-react";
+
+export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="container">
-        <div className="footer-content">
-          <div className="footer-brand">
-            <div className="footer-logo">
-              <svg className="footer-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span>Chronos Picker</span>
-            </div>
-            <p className="footer-tagline">
-              Modern DateTime Picker for React with comprehensive timezone support.
-            </p>
-            <div className="footer-social">
-              <a href="https://github.com/yourusername/chronos-picker" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </a>
-              <a href="https://npmjs.com/package/@theengineerguy/chronos-picker" target="_blank" rel="noopener noreferrer" aria-label="npm">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/>
-                </svg>
-              </a>
-            </div>
+    <footer className={styles.footer}>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.brand}>
+            <h3>Chronos Picker</h3>
+            <p>A modern, accessible date & time picker for React applications.</p>
           </div>
 
-          <div className="footer-links">
-            <div className="footer-links-group">
-              <h4>Documentation</h4>
-              <Link to="/docs">Getting Started</Link>
-              <Link to="/docs#api">API Reference</Link>
-              <Link to="/examples">Examples</Link>
-              <Link to="/playground">Playground</Link>
-            </div>
-
-            <div className="footer-links-group">
-              <h4>Resources</h4>
-              <a href="https://github.com/yourusername/chronos-picker" target="_blank" rel="noopener noreferrer">
-                GitHub
-              </a>
-              <a href="https://npmjs.com/package/@theengineerguy/chronos-picker" target="_blank" rel="noopener noreferrer">
-                npm Package
-              </a>
-              <a href="https://github.com/yourusername/chronos-picker/issues" target="_blank" rel="noopener noreferrer">
-                Issues
-              </a>
-              <a href="https://github.com/yourusername/chronos-picker/discussions" target="_blank" rel="noopener noreferrer">
-                Discussions
-              </a>
-            </div>
-
-            <div className="footer-links-group">
-              <h4>Community</h4>
-              <a href="https://github.com/yourusername/chronos-picker/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">
-                Contributing
-              </a>
-              <a href="https://github.com/yourusername/chronos-picker/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener noreferrer">
-                Code of Conduct
-              </a>
-              <a href="https://github.com/yourusername/chronos-picker/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
-                License (MIT)
-              </a>
-            </div>
+          <div className={styles.social}>
+            <a href="#" aria-label="Twitter">
+              <Twitter size={20} />
+            </a>
+            <a href="https://github.com/AnTIdoTe003/chronos-picker" aria-label="GitHub">
+              <Github size={20} />
+            </a>
           </div>
         </div>
 
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} Chronos Picker. Open source under MIT License.</p>
-          <p>
-            Built with <span className="footer-heart">❤️</span> for the React community
+        <div className={styles.copyright}>
+          <p>© {new Date().getFullYear()} The Engineer Guy. Released under MIT License.</p>
+          <p className={styles.madeWith}>
+            Made with <Heart size={14} fill="#ef4444" color="#ef4444" /> by developers, for developers
           </p>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

@@ -10,6 +10,10 @@ interface CalendarProps {
   timezone: string;
   minDate?: DateTime;
   maxDate?: DateTime;
+  /** Range mode: start and end for range selection */
+  selectedStart?: DateTime | null;
+  selectedEnd?: DateTime | null;
+  onRangeSelect?: (start: DateTime, end: DateTime) => void;
 }
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -20,7 +24,12 @@ export const Calendar: React.FC<CalendarProps> = ({
   timezone,
   minDate,
   maxDate,
+  selectedStart,
+  selectedEnd,
+  onRangeSelect,
 }) => {
+  const isRangeMode = onRangeSelect != null;
+
   const weeks = useMemo(() => {
     return generateCalendarMonth(
       viewDate.year,
@@ -28,9 +37,11 @@ export const Calendar: React.FC<CalendarProps> = ({
       timezone,
       selectedDate ?? undefined,
       minDate,
-      maxDate
+      maxDate,
+      selectedStart ?? undefined,
+      selectedEnd ?? undefined
     );
-  }, [viewDate, selectedDate, timezone, minDate, maxDate]);
+  }, [viewDate, selectedDate, timezone, minDate, maxDate, selectedStart, selectedEnd]);
   
   const weekdayNames = useMemo(() => getWeekdayNames(), []);
   const monthNames = useMemo(() => getMonthNames(), []);
@@ -54,7 +65,22 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
   
   const handleDateClick = (date: DateTime, isDisabled: boolean) => {
-    if (!isDisabled) {
+    if (isDisabled) return;
+    if (isRangeMode && onRangeSelect) {
+      const day = date.startOf('day');
+      if (selectedStart == null) {
+        onRangeSelect(date, date);
+      } else if (selectedEnd != null && selectedStart.hasSame(selectedEnd, 'day')) {
+        const start = selectedStart.startOf('day');
+        if (day < start) {
+          onRangeSelect(date, selectedStart);
+        } else {
+          onRangeSelect(selectedStart, date);
+        }
+      } else {
+        onRangeSelect(date, date);
+      }
+    } else {
       onDateSelect(date);
     }
   };
@@ -138,7 +164,11 @@ export const Calendar: React.FC<CalendarProps> = ({
                   day.isSelected ? 'selected' : ''
                 } ${day.isToday ? 'today' : ''} ${
                   !day.isCurrentMonth ? 'other-month' : ''
-                } ${day.isDisabled ? 'disabled' : ''}`}
+                } ${day.isDisabled ? 'disabled' : ''} ${
+                  day.isInRange ? 'in-range' : ''
+                } ${day.isRangeStart ? 'range-start' : ''} ${
+                  day.isRangeEnd ? 'range-end' : ''
+                }`}
                 onClick={() => handleDateClick(day.date, day.isDisabled)}
                 onKeyDown={(e) => handleKeyDown(e, day.date, day.isDisabled)}
                 disabled={day.isDisabled}
