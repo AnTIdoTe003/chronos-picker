@@ -53,8 +53,8 @@ export default function FeatureGrid() {
           ))}
         </div>
 
-        <div style={{ marginTop: '4rem', textAlign: 'center', color: '#666' }}>
-          <p style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
+        <div className={styles.ctaBlock}>
+          <p>
             Chronos Picker combines the power of a professional date and time picker with modern React best practices.
             Perfect for applications that need reliable timezone-aware datetime selection with accessibility as a priority.
           </p>

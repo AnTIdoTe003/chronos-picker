@@ -18,11 +18,19 @@
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 64px;
+  padding: 0 1rem;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (min-width: 641px) {
+  .container {
+    padding: 0 1.5rem;
+    height: 64px;
+  }
 }
 
 .logo {
@@ -33,6 +41,8 @@
   font-size: 1.125rem;
   color: var(--foreground);
   transition: opacity 0.2s;
+  min-height: 44px;
+  align-items: center;
 }
 
 .logo:hover {
@@ -43,10 +53,83 @@
   font-size: 1.25rem;
 }
 
-.links {
+.menuButton {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menuButton:hover {
+  background-color: var(--accent);
+}
+
+@media (min-width: 769px) {
+  .menuButton {
+    display: none;
+  }
+}
+
+.links {
+  display: none;
+  align-items: center;
   gap: 0.5rem;
+}
+
+@media (min-width: 769px) {
+  .links {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .links {
+    display: flex;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 1rem;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+    z-index: 40;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .linksOpen {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .link,
+  .githubLink {
+    padding: 0.875rem 1rem;
+    justify-content: flex-start;
+    min-height: 48px;
+    border-radius: var(--radius);
+  }
+
+  .githubLink {
+    border: 1px solid var(--border);
+  }
 }
 
 .link {
@@ -86,6 +169,21 @@
 .githubLink:hover {
   background-color: var(--accent);
   border-color: var(--border);
+}
+
+.backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: 56px;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 35;
+}
+
+@media (max-width: 768px) {
+  .backdrop {
+    display: block;
+  }
 }
 
 @media (max-width: 640px) {

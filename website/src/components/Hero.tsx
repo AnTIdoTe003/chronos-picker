@@ -43,7 +43,7 @@ export default function Hero() {
             <code>npm install @theengineerguy/chronos-picker luxon</code>
           </div>
 
-          <div style={{ marginTop: '2rem', fontSize: '0.875rem', color: '#666' }}>
+          <div className={styles.checkmarks}>
             <p>✓ Full timezone support with IANA database</p>
             <p>✓ Accessible (WCAG 2.1 AA compliant)</p>
             <p>✓ Dark mode & responsive design</p>
