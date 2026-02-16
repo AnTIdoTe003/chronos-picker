@@ -20,46 +20,52 @@ export interface DateTimeRangeValue {
   nights: number;
 }
 
+export interface Holiday {
+  date: DateTime | string | Date;
+  name: string;
+  type?: 'national' | 'long-weekend';
+}
+
 export interface DateTimePickerProps {
   /** Selected date and time value */
   value?: Date | string | DateTime;
-  
+
   /** Callback when date/time changes */
   onChange?: (value: DateTimeValue) => void;
-  
+
   /** IANA timezone identifier (e.g., "Asia/Kolkata", "America/New_York") */
   timezone?: string;
-  
+
   /** Custom date format for display (Luxon format tokens) */
   dateFormat?: string;
-  
+
   /** Custom time format for display (Luxon format tokens) */
   timeFormat?: string;
-  
+
   /** Minimum selectable date */
   minDate?: Date | string;
-  
+
   /** Maximum selectable date */
   maxDate?: Date | string;
-  
+
   /** Placeholder text */
   placeholder?: string;
-  
+
   /** Disabled state */
   disabled?: boolean;
-  
+
   /** Show time picker */
   showTime?: boolean;
-  
+
   /** 12-hour or 24-hour format */
   use24Hour?: boolean;
-  
+
   /** Custom CSS class */
   className?: string;
-  
+
   /** ARIA label */
   ariaLabel?: string;
-  
+
   /** Show timezone selector */
   showTimezoneSelector?: boolean;
 
@@ -77,6 +83,9 @@ export interface DateTimePickerProps {
 
   /** Callback when range changes (selectionMode is 'range') */
   onRangeChange?: (value: DateTimeRangeValue) => void;
+
+  /** List of holidays to display */
+  holidays?: Holiday[];
 }
 
 export interface CalendarDate {
@@ -91,4 +100,6 @@ export interface CalendarDate {
   isRangeStart?: boolean;
   /** Is the range end date */
   isRangeEnd?: boolean;
+  /** Holiday information if applicable */
+  holiday?: Holiday;
 }

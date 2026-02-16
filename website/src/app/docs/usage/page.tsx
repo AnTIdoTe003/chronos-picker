@@ -240,7 +240,7 @@ const [range, setRange] = useState<DateTimeRangeValue | null>(null);
       <section className={styles.section}>
         <h2>12-Hour Format</h2>
         <p>
-          Display time in 12-hour format with AM/PM. Great for user-facing applications 
+          Display time in 12-hour format with AM/PM. Great for user-facing applications
           where 12-hour format is preferred.
         </p>
 
@@ -272,7 +272,7 @@ const [range, setRange] = useState<DateTimeRangeValue | null>(null);
       <section className={styles.section}>
         <h2>Orientation</h2>
         <p>
-          Control the layout of the calendar and time panel with the <code>orientation</code> prop.
+          Control  the layout of the calendar and time panel with the <code>orientation</code> prop.
           Use <code>portrait</code> (default) for a stacked layout, or <code>landscape</code> for
           calendar and time side-by-side—handy on wider screens.
         </p>
@@ -315,7 +315,7 @@ const [range, setRange] = useState<DateTimeRangeValue | null>(null);
       <section className={styles.section}>
         <h2>Disabled State</h2>
         <p>
-          Disable the picker when interaction should be prevented, such as during 
+          Disable the picker when interaction should be prevented, such as during
           form submission or when conditions aren't met.
         </p>
 
@@ -342,7 +342,7 @@ const [range, setRange] = useState<DateTimeRangeValue | null>(null);
       <section className={styles.section}>
         <h2>With Default Value</h2>
         <p>
-          Set an initial value when the component mounts. Useful for edit forms 
+          Set an initial value when the component mounts. Useful for edit forms
           or when you want to show a pre-selected date.
         </p>
 
@@ -405,7 +405,7 @@ export default function MyForm() {
       <section className={styles.section}>
         <h2>Custom Date Format</h2>
         <p>
-          Format the output using Luxon's powerful formatting options. Access the 
+          Format the output using Luxon's powerful formatting options. Access the
           DateTime object directly for complete control.
         </p>
 
@@ -415,14 +415,14 @@ export default function MyForm() {
     // Different format options
     console.log(val.iso);  // ISO 8601: "2024-03-15T14:30:00.000-04:00"
     console.log(val.formatted);  // Default format
-    
+
     // Custom formats using Luxon
     const dt = val.dateTime;
     console.log(dt.toFormat('yyyy-MM-dd'));  // "2024-03-15"
     console.log(dt.toFormat('MMMM dd, yyyy'));  // "March 15, 2024"
     console.log(dt.toFormat('EEE, MMM d'));  // "Fri, Mar 15"
     console.log(dt.toLocaleString());  // Locale-aware format
-    
+
     // For API calls
     console.log(dt.toISO());  // Full ISO string
     console.log(dt.toMillis());  // Unix timestamp (ms)
@@ -447,21 +447,78 @@ export default function MyForm() {
   showTimezoneSelector
   onChange={(val) => {
     const pst = val.dateTime;  // In Pacific time
-    
+
     // Convert to other timezones
     const est = pst.setZone('America/New_York');
     const utc = pst.setZone('UTC');
     const tokyo = pst.setZone('Asia/Tokyo');
-    
+
     console.log('PST:', pst.toFormat('HH:mm'));
     console.log('EST:', est.toFormat('HH:mm'));
     console.log('UTC:', utc.toFormat('HH:mm'));
     console.log('Tokyo:', tokyo.toFormat('HH:mm'));
-    
+
     // Store in database (always use ISO or UTC)
     saveToDatabase(val.iso);
   }}
-/>`}
+/>
+
+      <section className={styles.section}>
+        <h2>Holidays & Long Weekends</h2>
+        <div className={styles.note}>
+          <strong>
+            <span style={{ fontSize: '1.5em' }}>🏖️</span>
+            Plan Your 2026 Vacations
+          </strong>
+          <p>
+            The picker supports highlighting holidays and long weekends.
+            Hover over dates to see details. Red dots indicate national holidays,
+            while green highlights suggest long weekends.
+          </p>
+        </div>
+
+        <DateTimePicker
+          showTime={false}
+          timezone="Asia/Kolkata"
+          dateFormat="EEE, MMM d"
+          placeholder="Check 2026 Holidays..."
+          className={styles.picker}
+          holidays={[
+            // --- 2026 National Holidays (India) ---
+            { date: '2026-01-26', name: 'Republic Day', type: 'national' },
+            { date: '2026-03-19', name: 'Holi', type: 'national' }, // Tentative
+            { date: '2026-04-14', name: 'Dr. Ambedkar Jayanti', type: 'national' },
+            { date: '2026-08-15', name: 'Independence Day', type: 'national' },
+            { date: '2026-10-02', name: 'Gandhi Jayanti', type: 'national' },
+            { date: '2026-10-20', name: 'Dussehra', type: 'national' }, // Tentative
+            { date: '2026-11-08', name: 'Diwali', type: 'national' }, // Tentative
+            { date: '2026-12-25', name: 'Christmas', type: 'national' },
+
+            // --- 2026 Long Weekend Suggestions ---
+
+            // Republic Day Weekend (Jan 24-26)
+            { date: '2026-01-24', name: 'Long Weekend: Trip to Jaipur?', type: 'long-weekend' },
+            { date: '2026-01-25', name: 'Long Weekend: Fort Visit', type: 'long-weekend' },
+            { date: '2026-01-26', name: 'Republic Day', type: 'long-weekend' },
+
+            // Holi Weekend (Mar 19-22 - Take Friday off)
+            { date: '2026-03-19', name: 'Holi Celebration', type: 'long-weekend' },
+            { date: '2026-03-20', name: 'Take a leave! Beach time?', type: 'long-weekend' },
+            { date: '2026-03-21', name: 'Relaxing Saturday', type: 'long-weekend' },
+            { date: '2026-03-22', name: 'Lazy Sunday', type: 'long-weekend' },
+
+            // Independence Day Weekend (Aug 15-17)
+            { date: '2026-08-15', name: 'Independence Day', type: 'long-weekend' },
+            { date: '2026-08-16', name: 'Sunday Brunch', type: 'long-weekend' },
+            { date: '2026-08-17', name: 'Take a leave? Hills calling!', type: 'long-weekend' }, // Monday leave suggestion
+
+            // Diwali Weekend (Nov 7-9)
+            { date: '2026-11-07', name: 'Choti Diwali', type: 'long-weekend' },
+            { date: '2026-11-08', name: 'Diwali', type: 'long-weekend' },
+            { date: '2026-11-09', name: 'Govardhan Puja (Take leave)', type: 'long-weekend' },
+          ]}
+        />
+      </section>`}
         />
       </section>
     </div>

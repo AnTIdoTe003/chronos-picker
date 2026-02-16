@@ -36,6 +36,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   selectionMode = 'single',
   rangeValue,
   onRangeChange,
+  holidays,
 }) => {
   const isRangeMode = selectionMode === 'range';
   const [isOpen, setIsOpen] = useState(false);
@@ -61,10 +62,10 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   const [viewDate, setViewDate] = useState<DateTime>(() => {
     return selectedDateTime || rangeStart || rangeEnd || nowInTimezone(timezone);
   });
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   // Update selected date when value prop changes
   useEffect(() => {
     if (!isRangeMode && value) {
@@ -79,7 +80,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       setRangeEnd(convertToTimezone(rangeValue.end, currentTimezone));
     }
   }, [isRangeMode, rangeValue, currentTimezone]);
-  
+
   // Handle click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,13 +88,13 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
         setIsOpen(false);
       }
     };
-    
+
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isOpen]);
-  
+
   // Handle escape key
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -102,14 +103,14 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
         inputRef.current?.focus();
       }
     };
-    
+
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen]);
-  
+
   const handleDateSelect = useCallback((date: DateTime) => {
     let newDateTime = date;
-    
+
     // Preserve time if already selected
     if (selectedDateTime) {
       newDateTime = date.set({
@@ -118,14 +119,14 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
         second: selectedDateTime.second,
       });
     }
-    
+
     setSelectedDateTime(newDateTime);
     setViewDate(newDateTime);
-    
+
     if (!showTime) {
       setIsOpen(false);
     }
-    
+
     if (onChange) {
       const value: DateTimeValue = {
         iso: newDateTime.toISO() || '',
@@ -136,13 +137,13 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       onChange(value);
     }
   }, [selectedDateTime, showTime, onChange, dateFormat, timeFormat]);
-  
+
   const handleTimeChange = useCallback((hour: number, minute: number) => {
     const baseDate = selectedDateTime || nowInTimezone(currentTimezone);
     const newDateTime = baseDate.set({ hour, minute, second: 0 });
-    
+
     setSelectedDateTime(newDateTime);
-    
+
     if (onChange) {
       const value: DateTimeValue = {
         iso: newDateTime.toISO() || '',
@@ -153,7 +154,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       onChange(value);
     }
   }, [selectedDateTime, currentTimezone, onChange, dateFormat, timeFormat]);
-  
+
   const handleRangeSelect = useCallback((start: DateTime, end: DateTime) => {
     const s = start.startOf('day');
     const e = end.startOf('day');
@@ -171,12 +172,12 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
 
   const handleTimezoneChange = useCallback((newTimezone: string) => {
     setCurrentTimezone(newTimezone);
-    
+
     if (selectedDateTime) {
       const converted = selectedDateTime.setZone(newTimezone);
       setSelectedDateTime(converted);
       setViewDate(converted);
-      
+
       if (onChange) {
         const value: DateTimeValue = {
           iso: converted.toISO() || '',
@@ -190,39 +191,39 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       setViewDate(nowInTimezone(newTimezone));
     }
   }, [selectedDateTime, onChange, dateFormat, timeFormat]);
-  
+
   const togglePicker = () => {
     if (!disabled) {
       setIsOpen(!isOpen);
     }
   };
-  
+
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       togglePicker();
     }
   };
-  
+
   const displayValue = isRangeMode
     ? (rangeStart && rangeEnd
-        ? `${rangeStart.toFormat('d MMM yyyy')} – ${rangeEnd.toFormat('d MMM yyyy')}`
-        : '')
+      ? `${rangeStart.toFormat('d MMM yyyy')} – ${rangeEnd.toFormat('d MMM yyyy')}`
+      : '')
     : (selectedDateTime
-        ? selectedDateTime.toFormat(`${dateFormat} ${showTime ? timeFormat : ''}`)
-        : '');
-  
+      ? selectedDateTime.toFormat(`${dateFormat} ${showTime ? timeFormat : ''}`)
+      : '');
+
   const minDateTime = minDate ? convertToTimezone(minDate, currentTimezone) : undefined;
   const maxDateTime = maxDate ? convertToTimezone(maxDate, currentTimezone) : undefined;
-  
+
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`chronos-picker ${className}`}
       data-disabled={disabled}
       data-theme={theme}
     >
-      <div 
+      <div
         className="chronos-input-wrapper"
         onClick={togglePicker}
       >
@@ -240,12 +241,12 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
           aria-haspopup="dialog"
           role="combobox"
         />
-        <svg 
+        <svg
           className="chronos-calendar-icon"
-          xmlns="http://www.w3.org/2000/svg" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
           strokeWidth="2"
         >
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -254,9 +255,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
           <line x1="3" y1="10" x2="21" y2="10" />
         </svg>
       </div>
-      
+
       {isOpen && (
-        <div 
+        <div
           className="chronos-dropdown"
           data-orientation={orientation}
           data-range-mode={isRangeMode}
@@ -285,8 +286,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
               selectedStart={isRangeMode ? rangeStart : undefined}
               selectedEnd={isRangeMode ? rangeEnd : undefined}
               onRangeSelect={isRangeMode ? handleRangeSelect : undefined}
+              holidays={holidays}
             />
-            
+
             {!isRangeMode && (showTime || showTimezoneSelector) && (
               <div className="chronos-sidebar">
                 {showTime && (
@@ -297,7 +299,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
                     timezone={currentTimezone}
                   />
                 )}
-                
+
                 {showTimezoneSelector && (
                   <TimezoneSelector
                     value={currentTimezone}

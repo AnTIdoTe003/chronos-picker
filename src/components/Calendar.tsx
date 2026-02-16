@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import { generateCalendarMonth, getWeekdayNames, getMonthNames } from '../utils/calendar';
+import { Holiday } from '../types';
 
 interface CalendarProps {
   viewDate: DateTime;
@@ -14,6 +15,7 @@ interface CalendarProps {
   selectedStart?: DateTime | null;
   selectedEnd?: DateTime | null;
   onRangeSelect?: (start: DateTime, end: DateTime) => void;
+  holidays?: Holiday[];
 }
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -27,6 +29,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   selectedStart,
   selectedEnd,
   onRangeSelect,
+  holidays,
 }) => {
   const isRangeMode = onRangeSelect != null;
 
@@ -39,31 +42,32 @@ export const Calendar: React.FC<CalendarProps> = ({
       minDate,
       maxDate,
       selectedStart ?? undefined,
-      selectedEnd ?? undefined
+      selectedEnd ?? undefined,
+      holidays
     );
-  }, [viewDate, selectedDate, timezone, minDate, maxDate, selectedStart, selectedEnd]);
-  
+  }, [viewDate, selectedDate, timezone, minDate, maxDate, selectedStart, selectedEnd, holidays]);
+
   const weekdayNames = useMemo(() => getWeekdayNames(), []);
   const monthNames = useMemo(() => getMonthNames(), []);
-  
+
   const handlePrevMonth = () => {
     onViewDateChange(viewDate.minus({ months: 1 }));
   };
-  
+
   const handleNextMonth = () => {
     onViewDateChange(viewDate.plus({ months: 1 }));
   };
-  
+
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newMonth = parseInt(e.target.value, 10);
     onViewDateChange(viewDate.set({ month: newMonth }));
   };
-  
+
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newYear = parseInt(e.target.value, 10);
     onViewDateChange(viewDate.set({ year: newYear }));
   };
-  
+
   const handleDateClick = (date: DateTime, isDisabled: boolean) => {
     if (isDisabled) return;
     if (isRangeMode && onRangeSelect) {
@@ -84,17 +88,17 @@ export const Calendar: React.FC<CalendarProps> = ({
       onDateSelect(date);
     }
   };
-  
+
   const handleKeyDown = (e: React.KeyboardEvent, date: DateTime, isDisabled: boolean) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleDateClick(date, isDisabled);
     }
   };
-  
+
   const currentYear = viewDate.year;
   const yearOptions = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
-  
+
   return (
     <div className="chronos-calendar" role="region" aria-label="Calendar">
       <div className="chronos-calendar-header">
@@ -106,7 +110,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         >
           ‹
         </button>
-        
+
         <div className="chronos-month-year-selectors">
           <select
             className="chronos-month-select"
@@ -120,7 +124,7 @@ export const Calendar: React.FC<CalendarProps> = ({
               </option>
             ))}
           </select>
-          
+
           <select
             className="chronos-year-select"
             value={viewDate.year}
@@ -134,7 +138,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             ))}
           </select>
         </div>
-        
+
         <button
           type="button"
           className="chronos-nav-button"
@@ -144,7 +148,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           ›
         </button>
       </div>
-      
+
       <div className="chronos-calendar-grid">
         <div className="chronos-weekday-row">
           {weekdayNames.map((name) => (
@@ -153,30 +157,28 @@ export const Calendar: React.FC<CalendarProps> = ({
             </div>
           ))}
         </div>
-        
+
         {weeks.map((week, weekIndex) => (
           <div key={weekIndex} className="chronos-week-row">
             {week.map((day, dayIndex) => (
               <button
                 key={dayIndex}
                 type="button"
-                className={`chronos-day ${
-                  day.isSelected ? 'selected' : ''
-                } ${day.isToday ? 'today' : ''} ${
-                  !day.isCurrentMonth ? 'other-month' : ''
-                } ${day.isDisabled ? 'disabled' : ''} ${
-                  day.isInRange ? 'in-range' : ''
-                } ${day.isRangeStart ? 'range-start' : ''} ${
-                  day.isRangeEnd ? 'range-end' : ''
-                }`}
+                className={`chronos-day ${day.isSelected ? 'selected' : ''
+                  } ${day.isToday ? 'today' : ''} ${!day.isCurrentMonth ? 'other-month' : ''
+                  } ${day.isDisabled ? 'disabled' : ''} ${day.isInRange ? 'in-range' : ''
+                  } ${day.isRangeStart ? 'range-start' : ''} ${day.isRangeEnd ? 'range-end' : ''
+                  } ${day.holiday ? `holiday ${day.holiday.type}` : ''}`}
                 onClick={() => handleDateClick(day.date, day.isDisabled)}
                 onKeyDown={(e) => handleKeyDown(e, day.date, day.isDisabled)}
                 disabled={day.isDisabled}
-                aria-label={day.date.toFormat('MMMM d, yyyy')}
+                aria-label={`${day.date.toFormat('MMMM d, yyyy')}${day.holiday ? `, ${day.holiday.name}` : ''}`}
                 aria-selected={day.isSelected}
                 aria-current={day.isToday ? 'date' : undefined}
+                title={day.holiday ? day.holiday.name : undefined}
               >
                 {day.date.day}
+                {day.holiday && <span className="chronos-holiday-dot" />}
               </button>
             ))}
           </div>
