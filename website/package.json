@@ -10,8 +10,8 @@
     "update": "npx npm-check-updates -u"
   },
   "dependencies": {
-    "@theengineerguy/chronos-picker": "^1.0.3",
-    "lucide-react": "^0.563.0",
+    "@theengineerguy/chronos-picker": "^1.0.5",
+    "lucide-react": "^0.564.0",
     "luxon": "^3.7.2",
     "prism-react-renderer": "^2.4.1"
   },
