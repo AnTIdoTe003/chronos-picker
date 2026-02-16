@@ -136,18 +136,18 @@
 
 @media (min-width: 641px) {
   .content {
-    padding: 2.5rem 1.5rem 3rem;
+    padding: 4rem 2rem 5rem;
   }
 }
 
 @media (min-width: 769px) {
   .content {
-    padding: 4rem 3rem 4rem 2rem;
+    padding: 5rem 3rem 6rem;
   }
 }
 
 @media (min-width: 1025px) {
   .content {
-    padding: 4rem 4rem 4rem 6rem;
+    padding: 5rem 4rem 6rem 5rem;
   }
 }
