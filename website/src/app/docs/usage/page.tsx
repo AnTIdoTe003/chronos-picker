@@ -2,7 +2,7 @@
 
 import CodeBlock from "@/components/CodeBlock";
 import styles from "../docs.module.css";
-import { DateTimePicker, DateTimeValue } from "@theengineerguy/chronos-picker";
+import { DateTimePicker, DateTimeValue, INDIAN_HOLIDAYS_2026, LONG_WEEKENDS_2026 } from "@theengineerguy/chronos-picker";
 import { useState } from "react";
 import "@theengineerguy/chronos-picker/dist/style.css";
 
