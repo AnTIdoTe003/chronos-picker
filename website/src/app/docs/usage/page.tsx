@@ -2,7 +2,13 @@
 
 import CodeBlock from "@/components/CodeBlock";
 import styles from "../docs.module.css";
-import { DateTimePicker, DateTimeValue, INDIAN_HOLIDAYS_2026, LONG_WEEKENDS_2026 } from "@theengineerguy/chronos-picker";
+import {
+  DateTimePicker,
+  DateTimeValue,
+  getDefaultHolidaysForTimezone,
+  INDIAN_HOLIDAYS_2026,
+  LONG_WEEKENDS_2026,
+} from "@theengineerguy/chronos-picker";
 import { useState } from "react";
 import "@theengineerguy/chronos-picker/dist/style.css";
 
@@ -28,6 +34,8 @@ export default function Usage() {
   const [dateOnlyVal, setDateOnlyVal] = useState<DateTimeValue | null>(null);
   const [orientationVal, setOrientationVal] = useState<DateTimeValue | null>(null);
   const [rangeSelection, setRangeSelection] = useState<DateTimeRangeValue | null>(null);
+  const [holidaysVal, setHolidaysVal] = useState<DateTimeValue | null>(null);
+  const [customHolidaysVal, setCustomHolidaysVal] = useState<DateTimeValue | null>(null);
   const customMaxDate = new Date(customMinDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
   return (
@@ -461,64 +469,111 @@ export default function MyForm() {
     // Store in database (always use ISO or UTC)
     saveToDatabase(val.iso);
   }}
-/>
+/>`}
+        />
+      </section>
 
       <section className={styles.section}>
         <h2>Holidays & Long Weekends</h2>
-        <div className={styles.note}>
-          <strong>
-            <span style={{ fontSize: '1.5em' }}>🏖️</span>
-            Plan Your 2026 Vacations
-          </strong>
-          <p>
-            The picker supports highlighting holidays and long weekends.
-            Hover over dates to see details. Red dots indicate national holidays,
-            while green highlights suggest long weekends.
-          </p>
+        <p>
+          By default, the picker shows national holidays and long weekend suggestions for the selected timezone.
+          Default timezone is <code>Asia/Kolkata</code>; built-in 2026 India holidays and long weekends are included.
+          Red dots indicate national holidays, green highlights suggest long weekends. Hover over dates to see names.
+        </p>
+        <p>
+          You can add your own dates with <code>customHolidays</code>, or pass <code>holidays</code> to override
+          the default list entirely. Set <code>showHolidays=false</code> to hide built-in holidays.
+        </p>
+
+        <h3>Default: Asia/Kolkata with built-in 2026 data</h3>
+        <div style={{ margin: '1.5rem 0', padding: '1.5rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
+          <DateTimePicker
+            value={holidaysVal?.dateTime}
+            onChange={setHolidaysVal}
+            showTime={false}
+            timezone="Asia/Kolkata"
+            dateFormat="EEE, MMM d"
+            placeholder="Check 2026 holidays & long weekends..."
+            showTimezoneSelector
+          />
+          <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
+            Selected: {holidaysVal?.formatted || 'None'} · Change timezone to see defaults (India only) or add custom dates below.
+          </div>
         </div>
 
-        <DateTimePicker
-          showTime={false}
-          timezone="Asia/Kolkata"
-          dateFormat="EEE, MMM d"
-          placeholder="Check 2026 Holidays..."
-          className={styles.picker}
-          holidays={[
-            // --- 2026 National Holidays (India) ---
-            { date: '2026-01-26', name: 'Republic Day', type: 'national' },
-            { date: '2026-03-19', name: 'Holi', type: 'national' }, // Tentative
-            { date: '2026-04-14', name: 'Dr. Ambedkar Jayanti', type: 'national' },
-            { date: '2026-08-15', name: 'Independence Day', type: 'national' },
-            { date: '2026-10-02', name: 'Gandhi Jayanti', type: 'national' },
-            { date: '2026-10-20', name: 'Dussehra', type: 'national' }, // Tentative
-            { date: '2026-11-08', name: 'Diwali', type: 'national' }, // Tentative
-            { date: '2026-12-25', name: 'Christmas', type: 'national' },
-
-            // --- 2026 Long Weekend Suggestions ---
-
-            // Republic Day Weekend (Jan 24-26)
-            { date: '2026-01-24', name: 'Long Weekend: Trip to Jaipur?', type: 'long-weekend' },
-            { date: '2026-01-25', name: 'Long Weekend: Fort Visit', type: 'long-weekend' },
-            { date: '2026-01-26', name: 'Republic Day', type: 'long-weekend' },
-
-            // Holi Weekend (Mar 19-22 - Take Friday off)
-            { date: '2026-03-19', name: 'Holi Celebration', type: 'long-weekend' },
-            { date: '2026-03-20', name: 'Take a leave! Beach time?', type: 'long-weekend' },
-            { date: '2026-03-21', name: 'Relaxing Saturday', type: 'long-weekend' },
-            { date: '2026-03-22', name: 'Lazy Sunday', type: 'long-weekend' },
-
-            // Independence Day Weekend (Aug 15-17)
-            { date: '2026-08-15', name: 'Independence Day', type: 'long-weekend' },
-            { date: '2026-08-16', name: 'Sunday Brunch', type: 'long-weekend' },
-            { date: '2026-08-17', name: 'Take a leave? Hills calling!', type: 'long-weekend' }, // Monday leave suggestion
-
-            // Diwali Weekend (Nov 7-9)
-            { date: '2026-11-07', name: 'Choti Diwali', type: 'long-weekend' },
-            { date: '2026-11-08', name: 'Diwali', type: 'long-weekend' },
-            { date: '2026-11-09', name: 'Govardhan Puja (Take leave)', type: 'long-weekend' },
-          ]}
+        <CodeBlock
+          code={`// Default: shows India 2026 national holidays + long weekends when timezone is Asia/Kolkata
+<DateTimePicker
+  timezone="Asia/Kolkata"
+  showTime={false}
+  showTimezoneSelector
+  placeholder="Check 2026 holidays..."
+  onChange={setValue}
+/>`}
         />
-      </section>`}
+
+        <h3>Adding custom holidays</h3>
+        <div style={{ margin: '1.5rem 0', padding: '1.5rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
+          <DateTimePicker
+            value={customHolidaysVal?.dateTime}
+            onChange={setCustomHolidaysVal}
+            showTime={false}
+            timezone="Asia/Kolkata"
+            dateFormat="EEE, MMM d"
+            placeholder="Built-in + custom holidays..."
+            customHolidays={[
+              { date: '2026-02-14', name: 'Company Offsite', type: 'long-weekend' },
+              { date: '2026-03-08', name: 'Team Holiday', type: 'national' },
+            ]}
+          />
+          <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
+            Selected: {customHolidaysVal?.formatted || 'None'} · Built-in 2026 + custom dates (e.g. Feb 14, Mar 8).
+          </div>
+        </div>
+
+        <CodeBlock
+          code={`import { DateTimePicker, DateTimeValue } from "@theengineerguy/chronos-picker";
+
+// customHolidays are merged with default holidays for the timezone
+<DateTimePicker
+  timezone="Asia/Kolkata"
+  showTime={false}
+  customHolidays={[
+    { date: '2026-02-14', name: 'Company Offsite', type: 'long-weekend' },
+    { date: '2026-03-08', name: 'Team Holiday', type: 'national' },
+  ]}
+  onChange={setValue}
+/>`}
+        />
+
+        <h3>Using package constants or full override</h3>
+        <CodeBlock
+          code={`import {
+  DateTimePicker,
+  INDIAN_HOLIDAYS_2026,
+  LONG_WEEKENDS_2026,
+  getDefaultHolidaysForTimezone,
+} from "@theengineerguy/chronos-picker";
+
+// Use built-in lists manually (e.g. for a different component)
+const india2026 = [...INDIAN_HOLIDAYS_2026, ...LONG_WEEKENDS_2026];
+
+// Get defaults for current timezone (India 2026 for Asia/Kolkata, else [])
+const defaults = getDefaultHolidaysForTimezone("Asia/Kolkata");
+
+// Full override: only show your own list (no built-in)
+<DateTimePicker
+  timezone="Asia/Kolkata"
+  showTime={false}
+  holidays={[
+    { date: '2026-01-01', name: 'New Year', type: 'national' },
+    { date: '2026-12-31', name: 'New Year Eve', type: 'long-weekend' },
+  ]}
+  onChange={setValue}
+/>
+
+// Hide built-in holidays, only show custom
+<DateTimePicker showHolidays={false} customHolidays={myList} onChange={setValue} />`}
         />
       </section>
     </div>

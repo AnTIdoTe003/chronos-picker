@@ -84,8 +84,23 @@ export interface DateTimePickerProps {
   /** Callback when range changes (selectionMode is 'range') */
   onRangeChange?: (value: DateTimeRangeValue) => void;
 
-  /** List of holidays to display */
+  /**
+   * List of holidays to display. When provided, this fully overrides default holidays
+   * for the timezone. Omit to use built-in holidays (Asia/Kolkata 2026) plus customHolidays.
+   */
   holidays?: Holiday[];
+
+  /**
+   * Custom holiday dates to add on top of the default holidays for the selected timezone.
+   * Ignored when holidays prop is set. Only used when timezone has built-in data or you pass holidays.
+   */
+  customHolidays?: Holiday[];
+
+  /**
+   * Whether to show default national holidays and long weekend suggestions for the selected timezone.
+   * Default true. Set to false to hide built-in holidays (customHolidays and holidays still apply if set).
+   */
+  showHolidays?: boolean;
 }
 
 export interface CalendarDate {

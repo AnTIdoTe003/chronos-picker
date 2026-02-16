@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DateTime } from 'luxon';
 import { DateTimePickerProps, DateTimeValue } from '../types';
+import { getDefaultHolidaysForTimezone } from '../constants/holidays';
 import { DEFAULT_TIMEZONE, convertToTimezone, nowInTimezone } from '../utils/timezone';
 import { Calendar } from './Calendar';
 import { TimePicker } from './TimePicker';
@@ -37,6 +38,8 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   rangeValue,
   onRangeChange,
   holidays,
+  customHolidays,
+  showHolidays = true,
 }) => {
   const isRangeMode = selectionMode === 'range';
   const [isOpen, setIsOpen] = useState(false);
@@ -216,6 +219,13 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   const minDateTime = minDate ? convertToTimezone(minDate, currentTimezone) : undefined;
   const maxDateTime = maxDate ? convertToTimezone(maxDate, currentTimezone) : undefined;
 
+  const effectiveHolidays = (() => {
+    if (holidays !== undefined) return holidays;
+    if (!showHolidays) return customHolidays ?? [];
+    const defaults = getDefaultHolidaysForTimezone(currentTimezone);
+    return [...defaults, ...(customHolidays ?? [])];
+  })();
+
   return (
     <div
       ref={containerRef}
@@ -286,7 +296,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
               selectedStart={isRangeMode ? rangeStart : undefined}
               selectedEnd={isRangeMode ? rangeEnd : undefined}
               onRangeSelect={isRangeMode ? handleRangeSelect : undefined}
-              holidays={holidays}
+              holidays={effectiveHolidays}
             />
 
             {!isRangeMode && (showTime || showTimezoneSelector) && (

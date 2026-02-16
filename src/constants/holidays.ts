@@ -1,5 +1,8 @@
 import { Holiday } from '../types';
 
+/** IANA timezone for which built-in 2026 holidays are provided */
+export const DEFAULT_HOLIDAYS_TIMEZONE = 'Asia/Kolkata';
+
 export const INDIAN_HOLIDAYS_2026: Holiday[] = [
   // --- 2026 National Holidays (India) ---
   { date: '2026-01-26', name: 'Republic Day', type: 'national' },
@@ -34,3 +37,15 @@ export const LONG_WEEKENDS_2026: Holiday[] = [
   { date: '2026-11-08', name: 'Diwali', type: 'long-weekend' },
   { date: '2026-11-09', name: 'Govardhan Puja (Take leave)', type: 'long-weekend' },
 ];
+
+/**
+ * Returns default national holidays and long weekend suggestions for the given timezone.
+ * Built-in data is provided for Asia/Kolkata (India) for 2026; other timezones get an empty array.
+ * Use with customHolidays prop to add your own dates on top of these.
+ */
+export function getDefaultHolidaysForTimezone(timezone: string): Holiday[] {
+  if (timezone === DEFAULT_HOLIDAYS_TIMEZONE) {
+    return [...INDIAN_HOLIDAYS_2026, ...LONG_WEEKENDS_2026];
+  }
+  return [];
+}
