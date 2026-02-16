@@ -370,7 +370,7 @@
   outline-offset: 2px;
 }
 
-/* ===== Holiday Styles ===== */
+/* ===== Holiday Styles (yellow/amber for UX-friendly highlighting) ===== */
 .chronos-day.holiday {
   position: relative;
 }
@@ -382,36 +382,126 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #ef4444; /* Red for holidays */
+  background-color: #d97706; /* Amber for national */
 }
 
-/* Long weekend styling - Green tint */
+/* National holiday - soft warm tint */
+.chronos-day.holiday.national {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #92400e;
+  font-weight: 600;
+}
+
+.chronos-day.holiday.national:hover:not(.disabled) {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.chronos-day.holiday.national .chronos-holiday-dot {
+  background-color: #d97706;
+}
+
+/* Long weekend - warm yellow/amber (UX friendly) */
 .chronos-day.holiday.long-weekend {
-  background-color: #ecfdf5;
-  color: #047857;
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+  color: #a16207;
   font-weight: 600;
 }
 
 .chronos-day.holiday.long-weekend:hover:not(.disabled) {
-  background-color: #d1fae5;
+  background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
+  box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.25);
 }
 
 .chronos-day.holiday.long-weekend .chronos-holiday-dot {
-  background-color: #10b981; /* Green dot for long weekends */
+  background-color: #ca8a04;
 }
 
 /* Dark theme overrides */
+.chronos-picker[data-theme="dark"] .chronos-day.holiday.national {
+  background: linear-gradient(135deg, #422006 0%, #78350f 100%);
+  color: #fde68a;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-day.holiday.national:hover:not(.disabled) {
+  background: linear-gradient(135deg, #78350f 0%, #a16207 100%);
+}
+
 .chronos-picker[data-theme="dark"] .chronos-day.holiday.long-weekend {
-  background-color: #064e3b;
-  color: #d1fae5;
+  background: linear-gradient(135deg, #422006 0%, #713f12 100%);
+  color: #fef08a;
 }
 
 .chronos-picker[data-theme="dark"] .chronos-day.holiday.long-weekend:hover:not(.disabled) {
-  background-color: #065f46;
+  background: linear-gradient(135deg, #713f12 0%, #a16207 100%);
 }
 
 .chronos-picker[data-theme="dark"] .chronos-day.holiday.long-weekend .chronos-holiday-dot {
-  background-color: #34d399;
+  background-color: #facc15;
+}
+
+/* ===== Vacation note (long weekend range callout) ===== */
+.chronos-vacation-notes {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-vacation-notes {
+  border-top-color: #374151;
+}
+
+.chronos-vacation-note {
+  position: relative;
+  padding: 10px 14px 12px 14px;
+  background: linear-gradient(145deg, #fffbeb 0%, #fef9c3 100%);
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  border-left: 4px solid #eab308;
+  box-shadow: 0 1px 3px rgba(234, 179, 8, 0.08);
+  font-size: 12px;
+  line-height: 1.45;
+  color: #713f12;
+}
+
+.chronos-vacation-note::before {
+  content: '✨';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.chronos-vacation-note-title {
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chronos-vacation-note-dates {
+  font-weight: 600;
+  color: #a16207;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-vacation-note {
+  background: linear-gradient(145deg, #422006 0%, #713f12 100%);
+  border-color: #a16207;
+  border-left-color: #facc15;
+  color: #fef08a;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-vacation-note-title {
+  color: #fde68a;
+}
+
+.chronos-picker[data-theme="dark"] .chronos-vacation-note-dates {
+  color: #fef08a;
 }
 
 /* ===== Time Picker ===== */

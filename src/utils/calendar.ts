@@ -131,3 +131,61 @@ export function getMonthNames(): string[] {
 
   return names;
 }
+
+export interface VacationRange {
+  start: DateTime;
+  end: DateTime;
+}
+
+/**
+ * Get consecutive holiday/long-weekend date ranges that overlap the given month.
+ * Used to show "You can take your vacation from X to Y" notes.
+ */
+export function getVacationRangesInMonth(
+  holidays: { date: DateTime | string | Date; name: string; type?: 'national' | 'long-weekend' }[] | undefined,
+  timezone: string,
+  year: number,
+  month: number
+): VacationRange[] {
+  if (!holidays || holidays.length === 0) return [];
+
+  const toDate = (h: { date: DateTime | string | Date }) => {
+    if (DateTime.isDateTime(h.date)) return h.date.setZone(timezone).startOf('day');
+    if (typeof h.date === 'string') return DateTime.fromISO(h.date, { zone: timezone }).startOf('day');
+    return DateTime.fromJSDate(h.date, { zone: timezone }).startOf('day');
+  };
+
+  const monthStart = DateTime.fromObject({ year, month, day: 1 }, { zone: timezone });
+  const monthEnd = monthStart.endOf('month');
+
+  const sortedIsoDates = Array.from(
+    new Set(holidays.map(h => toDate(h).toISODate()).filter(Boolean) as string[])
+  ).sort();
+
+  if (sortedIsoDates.length === 0) return [];
+
+  const ranges: VacationRange[] = [];
+  let runStart = DateTime.fromISO(sortedIsoDates[0]!, { zone: timezone });
+  let runEnd = runStart;
+
+  for (let i = 1; i < sortedIsoDates.length; i++) {
+    const d = DateTime.fromISO(sortedIsoDates[i]!, { zone: timezone });
+    const prev = DateTime.fromISO(sortedIsoDates[i - 1]!, { zone: timezone });
+    const daysDiff = d.diff(prev, 'days').days;
+
+    if (daysDiff <= 1) {
+      runEnd = d;
+    } else {
+      if (runEnd >= monthStart && runStart <= monthEnd) {
+        ranges.push({ start: runStart, end: runEnd });
+      }
+      runStart = d;
+      runEnd = d;
+    }
+  }
+  if (runEnd >= monthStart && runStart <= monthEnd) {
+    ranges.push({ start: runStart, end: runEnd });
+  }
+
+  return ranges;
+}

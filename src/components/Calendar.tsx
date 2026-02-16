@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
-import { generateCalendarMonth, getWeekdayNames, getMonthNames } from '../utils/calendar';
+import { generateCalendarMonth, getWeekdayNames, getMonthNames, getVacationRangesInMonth } from '../utils/calendar';
 import { Holiday } from '../types';
 
 interface CalendarProps {
@@ -46,6 +46,11 @@ export const Calendar: React.FC<CalendarProps> = ({
       holidays
     );
   }, [viewDate, selectedDate, timezone, minDate, maxDate, selectedStart, selectedEnd, holidays]);
+
+  const vacationRanges = useMemo(
+    () => getVacationRangesInMonth(holidays, timezone, viewDate.year, viewDate.month),
+    [holidays, timezone, viewDate.year, viewDate.month]
+  );
 
   const weekdayNames = useMemo(() => getWeekdayNames(), []);
   const monthNames = useMemo(() => getMonthNames(), []);
@@ -184,6 +189,26 @@ export const Calendar: React.FC<CalendarProps> = ({
           </div>
         ))}
       </div>
+
+      {vacationRanges.length > 0 && (
+        <div className="chronos-vacation-notes" role="region" aria-label="Vacation suggestions">
+          {vacationRanges.map((range, idx) => {
+            const isSingleDay = range.start.hasSame(range.end, 'day');
+            const startStr = range.start.toFormat('d MMM yyyy');
+            const endStr = range.end.toFormat('d MMM yyyy');
+            return (
+              <div key={idx} className="chronos-vacation-note">
+                <div className="chronos-vacation-note-title">
+                  {isSingleDay ? 'Vacation day' : 'You can take your vacation'}
+                </div>
+                <div className="chronos-vacation-note-dates">
+                  {isSingleDay ? startStr : `from ${startStr} to ${endStr}`}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
